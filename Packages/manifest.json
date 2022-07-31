@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "com.unity.render-pipelines.high-definition": "14.0.3",
+    "com.unity.rendering.denoising": "1.0.0"
+  }
+}
