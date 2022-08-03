@@ -402,12 +402,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rowCount: 20
-  _width: 0.1
-  _length: 5
-  _resolution: 200
-  _frequency: {x: 8, y: 15}
-  _bias: 0
-  _seed: 1087
+  _modeling:
+    Width: 0.1
+    Length: 5
+    Frequency: {x: 10, y: 20.17}
+    Bias: 0
+    Resolution: 100
+    Seed: 10
   _material: {fileID: 2100000, guid: 588b7dc3ee10d1d4d859393533e3723e, type: 2}
 --- !u!4 &545161854
 Transform:
