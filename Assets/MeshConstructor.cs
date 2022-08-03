@@ -34,6 +34,12 @@ sealed class MeshConstructor : System.IDisposable
     {
         if (_buffers.i.IsCreated) _buffers.i.Dispose();
         if (_buffers.v.IsCreated) _buffers.v.Dispose();
+
+        if (SharedMesh != null)
+        {
+            Object.Destroy(SharedMesh);
+            SharedMesh = null;
+        }
     }
 
     public void InitializeIndexBuffer()
