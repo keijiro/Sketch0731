@@ -2,22 +2,42 @@ using UnityEngine;
 using Unity.Collections;
 using Unity.Mathematics;
 
-sealed class MeshConstructor : System.IDisposable
+namespace Sketch0731 {
+
+sealed class Modeler : System.IDisposable
 {
-    int _pointCount;
-    (NativeArray<int> i, NativeArray<float3> v) _buffers;
-
-    public Mesh SharedMesh { get; private set; }
-
-    int IndexCount => (_pointCount - 1) * 3 * 6;
-    int VertexCount => _pointCount * 6;
+    #region Model properties
 
     public float Width { get; set; } = 1;
     public float Length { get; set; } = 1;
     public float Frequency { get; set; } = 14;
     public float Phase { get; set; } = 0;
 
-    public MeshConstructor(int pointCount)
+    #endregion
+
+    #region Object reference property
+
+    public Mesh SharedMesh { get; private set; }
+
+    #endregion
+
+    #region Private variables
+
+    int _pointCount;
+    (NativeArray<int> i, NativeArray<float3> v) _buffers;
+
+    #endregion
+
+    #region Private utility properties
+
+    int IndexCount => (_pointCount - 1) * 3 * 6;
+    int VertexCount => _pointCount * 6;
+
+    #endregion
+
+    #region Constructor / destructor
+
+    public Modeler(int pointCount)
     {
         _pointCount = pointCount;
 
@@ -42,8 +62,13 @@ sealed class MeshConstructor : System.IDisposable
         }
     }
 
+    #endregion
+
+    #region Mesh building methods
+
     public void InitializeIndexBuffer()
     {
+        ref var buf = ref _buffers.i;
         var offs = 0;
 
         for (var i = 0; i < _pointCount - 1; i++)
@@ -53,13 +78,13 @@ sealed class MeshConstructor : System.IDisposable
 
             for (var j = 0; j < 3; j++)
             {
-                _buffers.i[offs++] = i1 + 0;
-                _buffers.i[offs++] = i2 + 0;
-                _buffers.i[offs++] = i1 + 1;
+                buf[offs++] = i1 + 0;
+                buf[offs++] = i2 + 0;
+                buf[offs++] = i1 + 1;
 
-                _buffers.i[offs++] = i1 + 1;
-                _buffers.i[offs++] = i2 + 0;
-                _buffers.i[offs++] = i2 + 1;
+                buf[offs++] = i1 + 1;
+                buf[offs++] = i2 + 0;
+                buf[offs++] = i2 + 1;
 
                 i1 += 2;
                 i2 += 2;
@@ -69,24 +94,28 @@ sealed class MeshConstructor : System.IDisposable
 
     public void InitializeVertexBuffer()
     {
+        ref var buf = ref _buffers.v;
         var offs = 0;
 
         for (var i = 0; i < _pointCount; i++)
         {
             var p = (float)i / (_pointCount - 1);
+            var wave = math.sin(p * Frequency + Phase);
+
             var x1 = -0.5f * Width;
             var x2 = +0.5f * Width;
-            var y = (math.sin(p * Frequency + Phase) * 0.2f + 1) * (p / 2 + 0.5f);
+
+            var y = (wave * 0.2f + 1) * (p / 2 + 0.5f);
             var z = (p - 0.5f) * Length;
 
-            _buffers.v[offs++] = math.float3(x1, 0, z);
-            _buffers.v[offs++] = math.float3(x1, y, z);
+            buf[offs++] = math.float3(x1, 0, z);
+            buf[offs++] = math.float3(x1, y, z);
 
-            _buffers.v[offs++] = math.float3(x1, y, z);
-            _buffers.v[offs++] = math.float3(x2, y, z);
+            buf[offs++] = math.float3(x1, y, z);
+            buf[offs++] = math.float3(x2, y, z);
 
-            _buffers.v[offs++] = math.float3(x2, y, z);
-            _buffers.v[offs++] = math.float3(x2, 0, z);
+            buf[offs++] = math.float3(x2, y, z);
+            buf[offs++] = math.float3(x2, 0, z);
         }
     }
 
@@ -99,4 +128,8 @@ sealed class MeshConstructor : System.IDisposable
         SharedMesh.RecalculateNormals();
         SharedMesh.RecalculateBounds();
     }
+
+    #endregion
 }
+
+} // namespace Sketch0731

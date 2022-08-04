@@ -1,12 +1,14 @@
 using UnityEngine;
 using Random = Unity.Mathematics.Random;
 
+namespace Sketch0731 {
+
 sealed class Node : MonoBehaviour
 {
     static System.Type [] ComponentList
       = new [] { typeof(MeshFilter), typeof(MeshRenderer), typeof(Node) };
 
-    MeshConstructor _mesh;
+    Modeler _modeler;
 
     public static Node Create(Transform parent, Material material)
     {
@@ -18,40 +20,40 @@ sealed class Node : MonoBehaviour
     }
 
     void OnDestroy()
-      => _mesh?.Dispose();
+      => _modeler?.Dispose();
 
-    public void Activate(Modeling modeling, int index)
+    public void Activate(Config config, int index)
     {
         gameObject.SetActive(true);
-        BuildMesh(modeling, index);
+        BuildMesh(config, index);
     }
 
     public void Deactivate()
     {
         gameObject.SetActive(false);
-        _mesh?.Dispose();
-        _mesh = null;
+        _modeler?.Dispose();
+        _modeler = null;
     }
 
-    void BuildMesh(Modeling modeling, int index)
+    void BuildMesh(Config config, int index)
     {
-        var rand = new Random(modeling.Seed + (uint)index);
+        var rand = new Random(config.Seed + (uint)index);
         rand.NextUInt4();
 
-        _mesh?.Dispose();
-        _mesh = new MeshConstructor(modeling.Resolution)
-          { Width = modeling.Width, Length = modeling.Length,
-            Frequency = rand.NextFloat(modeling.Frequency.x, modeling.Frequency.y),
-            Phase = rand.NextFloat(0, modeling.Bias) };
+        _modeler?.Dispose();
+        _modeler = new Modeler(config.Resolution)
+          { Width = config.Width, Length = config.Length,
+            Frequency = rand.NextFloat(config.Frequency.x, config.Frequency.y),
+            Phase = rand.NextFloat(0, config.Bias) };
 
-        _mesh.InitializeIndexBuffer();
-        _mesh.InitializeVertexBuffer();
-        _mesh.ConstructMesh();
+        _modeler.InitializeIndexBuffer();
+        _modeler.InitializeVertexBuffer();
+        _modeler.ConstructMesh();
 
-        GetComponent<MeshFilter>().sharedMesh = _mesh.SharedMesh;
+        GetComponent<MeshFilter>().sharedMesh = _modeler.SharedMesh;
         var material = GetComponent<MeshRenderer>().sharedMaterial;
 
-        transform.localPosition = new Vector3(index * modeling.Width, 0, 0);
+        transform.localPosition = new Vector3(index * config.Width, 0, 0);
         transform.localRotation = Quaternion.identity;
 
         var color = Color.HSVToRGB(rand.NextFloat(), 1, 1);
@@ -60,3 +62,5 @@ sealed class Node : MonoBehaviour
         material.SetColor("_EmissiveColor", color * intensity);
     }
 }
+
+} // namespace Sketch0731
