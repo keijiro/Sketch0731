@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Sketch0731 {
 
+[ExecuteInEditMode]
 sealed class Builder : MonoBehaviour
 {
     const int Capacity = 256;
@@ -10,23 +11,36 @@ sealed class Builder : MonoBehaviour
     [SerializeField] Config _config = null;
     [SerializeField] Material _material = null;
 
-    Node[] _nodes = new Node[Capacity];
+    Node[] _pool;
 
     void InitializePool()
     {
+        _pool = new Node[Capacity];
         for (var i = 0; i < Capacity; i++)
-            _nodes[i] = Node.Create(transform, _material);
+            _pool[i] = Node.Create(transform, _material);
     }
 
-    void Start()
+    void OnDisable()
+      => OnDestroy();
+
+    void OnDestroy()
     {
-        InitializePool();
+        if (_pool != null)
+        {
+            for (var i = 0; i < Capacity; i++) Util.DestroyObject(_pool[i]);
+            _pool = null;
+        }
+    }
+
+    void Update()
+    {
+        if (_pool == null || _pool.Length == 0) InitializePool();
 
         for (var i = 0; i < _rowCount; i++)
-            _nodes[i].Activate(_config, i);
+            _pool[i].Activate(_config, i);
 
         for (var i = _rowCount; i < Capacity; i++)
-            _nodes[i].Deactivate();
+            _pool[i].Deactivate();
     }
 }
 

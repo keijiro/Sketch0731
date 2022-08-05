@@ -401,14 +401,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 073408e4ed7288e43b71f670723f239e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rowCount: 20
-  _modeling:
+  _rowCount: 21
+  _config:
     Width: 0.1
-    Length: 5
-    Frequency: {x: 10, y: 20.17}
-    Bias: 0
-    Resolution: 100
-    Seed: 10
+    Length: 4
+    Frequency: {x: 7, y: 20}
+    Bias: 0.2
+    BurstProbability: 0.15
+    BurstIntensity: 200
+    Resolution: 200
+    Seed: 2147
   _material: {fileID: 2100000, guid: 588b7dc3ee10d1d4d859393533e3723e, type: 2}
 --- !u!4 &545161854
 Transform:

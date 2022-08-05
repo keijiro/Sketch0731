@@ -57,7 +57,7 @@ sealed class Modeler : System.IDisposable
 
         if (SharedMesh != null)
         {
-            Object.Destroy(SharedMesh);
+            Util.DestroyObject(SharedMesh);
             SharedMesh = null;
         }
     }

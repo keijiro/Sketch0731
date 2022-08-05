@@ -3,6 +3,7 @@ using Random = Unity.Mathematics.Random;
 
 namespace Sketch0731 {
 
+[ExecuteInEditMode]
 sealed class Node : MonoBehaviour
 {
     #region Public factory method
@@ -21,6 +22,7 @@ sealed class Node : MonoBehaviour
 
         // Material copy
         node._material = new Material(material);
+        node._material.hideFlags = HideFlags.DontSave;
         go.GetComponent<MeshRenderer>().sharedMaterial = node._material;
 
         return node;
@@ -59,17 +61,11 @@ sealed class Node : MonoBehaviour
 
     void OnDestroy()
     {
-        if (_modeler != null)
-        {
-            _modeler?.Dispose();
-            _modeler = null;
-        }
+        _modeler?.Dispose();
+        _modeler = null;
 
-        if (_material != null)
-        {
-            Destroy(_material);
-            _material = null;
-        }
+        Util.DestroyObject(_material);
+        _material = null;
     }
 
     #endregion
