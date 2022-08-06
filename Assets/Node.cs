@@ -75,8 +75,8 @@ sealed class Node : MonoBehaviour
     void BuildMesh(Config config, int index)
     {
         // Local random number generator
-        var rand = new Random(config.Seed + (uint)index);
-        rand.NextUInt4();
+        var rand = new Random(config.Seed + (uint)index * 256);
+        rand.NextUInt4(); rand.NextUInt4();
 
         // Modeler setup
         _modeler?.Dispose();
@@ -84,7 +84,7 @@ sealed class Node : MonoBehaviour
           { Width = config.Width,
             Length = config.Length,
             Frequency = rand.NextFloat(config.Frequency.x, config.Frequency.y),
-            Phase = rand.NextFloat(0, config.Bias) };
+            Phase = rand.NextFloat(0, config.Bias * Mathf.PI * 2) };
 
         // Mesh construction
         _modeler.InitializeIndexBuffer();
