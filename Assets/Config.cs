@@ -5,6 +5,9 @@ namespace Sketch0731 {
 [System.Serializable]
 sealed class Config
 {
+    public const int MaxRows = 256;
+
+    [Range(0, MaxRows)] public uint Rows = 10;
     public float Width = 0.1f;
     public float Length = 5;
     public Vector2 Frequency = new Vector2(10, 15);

@@ -100,7 +100,8 @@ sealed class Node : MonoBehaviour
         _material.SetColor("_EmissiveColor", color * intensity);
 
         // Node placement
-        transform.localPosition = new Vector3(index * config.Width, 0, 0);
+        var x = config.Width * (index - (config.Rows - 1) * 0.5f);
+        transform.localPosition = new Vector3(x, 0, 0);
         transform.localRotation = Quaternion.identity;
     }
 

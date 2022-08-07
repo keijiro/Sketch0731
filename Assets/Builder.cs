@@ -5,9 +5,6 @@ namespace Sketch0731 {
 [ExecuteInEditMode]
 sealed class Builder : MonoBehaviour
 {
-    const int Capacity = 256;
-
-    [SerializeField, Range(0, Capacity)] int _rowCount = 10;
     [SerializeField] Config _config = null;
     [SerializeField] Material _material = null;
 
@@ -15,8 +12,8 @@ sealed class Builder : MonoBehaviour
 
     void InitializePool()
     {
-        _pool = new Node[Capacity];
-        for (var i = 0; i < Capacity; i++)
+        _pool = new Node[Config.MaxRows];
+        for (var i = 0; i < _pool.Length; i++)
             _pool[i] = Node.Create(transform, _material);
     }
 
@@ -27,7 +24,8 @@ sealed class Builder : MonoBehaviour
     {
         if (_pool != null)
         {
-            for (var i = 0; i < Capacity; i++) Util.DestroyObject(_pool[i]);
+            for (var i = 0; i < _pool.Length; i++)
+                Util.DestroyObject(_pool[i]);
             _pool = null;
         }
     }
@@ -36,10 +34,10 @@ sealed class Builder : MonoBehaviour
     {
         if (_pool == null || _pool.Length == 0) InitializePool();
 
-        for (var i = 0; i < _rowCount; i++)
+        for (var i = 0; i < _config.Rows; i++)
             _pool[i].Activate(_config, i);
 
-        for (var i = _rowCount; i < Capacity; i++)
+        for (var i = _config.Rows; i < _pool.Length; i++)
             _pool[i].Deactivate();
     }
 }

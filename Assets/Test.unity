@@ -401,8 +401,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 073408e4ed7288e43b71f670723f239e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rowCount: 20
   _config:
+    Rows: 24
     Width: 0.1
     Length: 4
     Frequency: {x: 9.74, y: 5.6}
@@ -410,7 +410,7 @@ MonoBehaviour:
     BurstProbability: 0.283
     BurstIntensity: 263.4
     Resolution: 200
-    Seed: 2672
+    Seed: 2724
   _material: {fileID: 2100000, guid: 588b7dc3ee10d1d4d859393533e3723e, type: 2}
 --- !u!4 &545161854
 Transform:
@@ -420,7 +420,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 545161852}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
